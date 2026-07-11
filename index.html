@@ -2,22 +2,90 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Hello от твоего парня 💖</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Черешма</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(45deg, #ff1493, #00bfff);
-            color: white;
-            text-align: center;
-            padding: 100px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        h1 { font-size: 60px; }
-        p { font-size: 24px; }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background: #000 url('bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 3px solid #a855f7;
+            box-shadow: 0 0 25px #a855f7, 0 0 50px rgba(168, 85, 247, 0.4);
+            overflow: hidden;
+            margin: 0 auto 25px;
+            background: #000;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: #c084fc;
+            text-shadow: 0 0 10px #c084fc, 0 0 25px rgba(192, 132, 252, 0.6);
+            letter-spacing: 2px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 12px;
+            height: 24px;
+            background: #c084fc;
+            margin-left: 5px;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            box-shadow: 0 0 10px #c084fc;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
-    <h1>Hello World! 🌈</h1>
-    <p>Это мой первый сайт, сделанный в Termux</p>
-    <p>Я — твой гей-бот и помогаю тебе 💅</p>
+    <div class="overlay"></div>
+    <div class="content">
+        <div class="avatar">
+            <img src="avatar.png" alt="Аватарка">
+        </div>
+        <h1 class="title">привет Я черешма!<span class="cursor"></span></h1>
+    </div>
 </body>
 </html>
