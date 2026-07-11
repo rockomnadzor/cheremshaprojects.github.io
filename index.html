@@ -10,7 +10,7 @@
         #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: #000; }
         .container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; -webkit-overflow-scrolling: touch; position: relative; z-index: 1; }
         .screen { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
-        .screen::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 0; }
+        .screen::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.35); z-index: 0; }
         .content { position: relative; z-index: 1; text-align: center; padding: 20px; max-width: 90%; }
         .avatar { width: 160px; height: 160px; border-radius: 50%; border: 3px solid #a855f7; box-shadow: 0 0 25px #a855f7, 0 0 50px rgba(168,85,247,0.4); overflow: hidden; margin: 0 auto 25px; background: #000; }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -77,15 +77,46 @@
     </div>
     <script>
         const c = document.getElementById('matrix-canvas'), x = c.getContext('2d');
-        let w, h; function r(){ w=c.width=innerWidth; h=c.height=innerHeight; } r(); addEventListener('resize',r);
-        const m = '0123456789アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-        const f = 16, d = Array(Math.floor(w/f)).fill(1);
-        setInterval(() => {
-            x.fillStyle='rgba(0,0,0,0.05)'; x.fillRect(0,0,w,h);
-            x.fillStyle='#0F0'; x.font=f+'px monospace';
-            for(let i=0;i<d.length;i++){ x.fillText(m[Math.floor(Math.random()*m.length)], i*f, d[i]*f); if(d[i]*f>h&&Math.random()>0.975)d[i]=0; d[i]++; }
-        }, 35);
-        const container = document.getElementById('container'), dots = document.querySelectorAll('.dot'), screens = document.querySelectorAll('.screen');
+        let w, h;
+        function resize(){ w=c.width=innerWidth; h=c.height=innerHeight; }
+        resize();
+        window.addEventListener('resize', resize);
+        
+        const chars = '0123456789ABCDEF';
+        const fontSize = 14;
+        let columns = Math.floor(w / fontSize);
+        let drops = Array(columns).fill(1);
+        
+        function draw(){
+            x.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            x.fillRect(0, 0, w, h);
+            
+            for(let i = 0; i < drops.length; i++){
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                const isGreen = Math.random() > 0.7;
+                x.fillStyle = isGreen ? '#0F0' : '#a855f7';
+                x.shadowBlur = isGreen ? 8 : 12;
+                x.shadowColor = isGreen ? '#0F0' : '#a855f7';
+                x.font = 'bold ' + fontSize + 'px monospace';
+                x.fillText(text, i * fontSize, drops[i] * fontSize);
+                x.shadowBlur = 0;
+                
+                if(drops[i] * fontSize > h && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        
+        setInterval(draw, 40);
+        
+        window.addEventListener('resize', () => {
+            resize();
+            columns = Math.floor(w / fontSize);
+            drops = Array(columns).fill(1);
+        });
+        
+        const container = document.getElementById('container');
+        const dots = document.querySelectorAll('.dot');
+        const screens = document.querySelectorAll('.screen');
         function updateDots(){ const idx = Math.round(container.scrollTop / window.innerHeight); dots.forEach((d,i)=>d.classList.toggle('active', i===idx)); }
         function goTo(index){ screens[index].scrollIntoView({ behavior: 'smooth' }); }
         container.addEventListener('scroll', updateDots);
